@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,27 +28,13 @@ class GetServerNameCest
     {
         $I->wantToTest('Http\Request - getServerName()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
-
+        unset($_SERVER['SERVER_NAME']);
         $request = new Request();
         $I->assertEquals('localhost', $request->getServerName());
 
-        $_SERVER = $store;
-
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'SERVER_NAME'        => 'dev.phalcon.io',
-        ];
-
+        $_SERVER['SERVER_NAME'] = 'dev.phalcon.io';
         $request = new Request();
-        $I->assertEquals('dev.phalcon.io', $request->getServerName());
 
-        $_SERVER = $store;
+        $I->assertEquals('dev.phalcon.io', $request->getServerName());
     }
 }

@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,10 +28,7 @@ class IsMethodCest
     {
         $I->wantToTest('Http\Request - isMethod()');
 
-        $store   = $_SERVER ?? [];
-        $_SERVER = [
-            'REQUEST_METHOD' => 'POST',
-        ];
+        $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $request = new Request();
 
@@ -42,7 +39,5 @@ class IsMethodCest
 
         $I->assertTrue($request->isMethod('GET'));
         $I->assertTrue($request->isMethod(['GET', 'POST']));
-
-        $_SERVER = $store;
     }
 }

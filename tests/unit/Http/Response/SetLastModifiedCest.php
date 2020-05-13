@@ -37,13 +37,13 @@ class SetLastModifiedCest
         $oLastModified->modify('+1 months');
 
         $oLastModified->setTimezone(
-            new DateTimeZone("UTC")
+            new DateTimeZone('UTC')
         );
 
         $oResponse->setLastModified($oLastModified);
 
         $I->assertSame(
-            $oLastModified->format("D, d M Y H:i:s") . " GMT",
+            $oLastModified->format('D, d M Y H:i:s') . ' GMT',
             $oResponse->getHeaders()->get('Last-Modified')
         );
     }

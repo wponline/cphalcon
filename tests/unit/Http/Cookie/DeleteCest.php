@@ -28,8 +28,8 @@ class DeleteCest
     {
         $I->wantToTest('Http\Cookie - delete()');
 
-        $name  = "tets";
-        $value = "phalcon";
+        $name  = 'tets';
+        $value = 'phalcon';
 
         $cookie = new Cookie($name);
         $I->assertNull($cookie->getValue());

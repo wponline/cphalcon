@@ -462,11 +462,11 @@ class LoadCest
         $cookie = $_COOKIE;
         $files  = $_FILES;
 
-        unset($_SERVER);
-        unset($_GET);
-        unset($_POST);
-        unset($_COOKIE);
-        unset($_FILES);
+        unset($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
+        
+        
+        
+        
 
         $request = $factory->load($example[1], $example[2], $example[3], $example[4], $example[5]);
 
@@ -607,9 +607,7 @@ class LoadCest
         );
     }
 
-    /**
-     * @return array
-     */
+    
     private function getConstructorExamples(): array
     {
         return [
@@ -664,9 +662,7 @@ class LoadCest
         ];
     }
 
-    /**
-     * @return array
-     */
+    
     private function getServerNameExamples(): array
     {
         return [

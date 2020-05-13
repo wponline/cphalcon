@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -15,10 +15,13 @@ namespace Phalcon\Test\Unit\Http\Request;
 
 use Codeception\Example;
 use Phalcon\Http\Request;
+use Phalcon\Test\Fixtures\Traits\GlobalsBackupTrait;
 use UnitTester;
 
 class IsCest
 {
+    //use GlobalsBackupTrait;
+
     /**
      * Tests Is methods
      *
@@ -29,29 +32,18 @@ class IsCest
      */
     public function httpRequestIs(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Request - is*() - ' . $example[0]);
+        $I->wantToTest("Http\Request - is*() - {$example[0]}");
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $headers = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
-        $headers = array_merge($headers, $example[1]);
-        $_SERVER = $headers;
+        $_SERVER = $example[1];
 
-        $request = new Request();
-
-        $expected = $example[2];
-        $class    = $example[3];
-        $actual   = $request->$class();
+        [ , , $expected, $method] = $example;
+        $actual = (new Request())->$method();
 
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 
     /**
-     * @return array|array[]
+     * @return array[]
      */
     private function getExamples(): array
     {

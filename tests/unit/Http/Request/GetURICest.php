@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,48 +28,23 @@ class GetURICest
     {
         $I->wantToTest('Http\Request - getURI()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
-
+        unset($_SERVER['REQUEST_URI']);
         $request = new Request();
 
         $I->assertEmpty($request->getURI());
 
-        $_SERVER = $store;
-
-        // Valid
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_URI'        => 'https://dev.phalcon.io?a=b',
-        ];
-
+        $_SERVER['REQUEST_URI'] = 'https://dev.phalcon.io?a=b';
         $request = new Request();
 
         $expected = 'https://dev.phalcon.io?a=b';
         $actual   = $request->getURI();
         $I->assertEquals($expected, $actual);
 
-        $_SERVER = $store;
-
-        // Valid - only path
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_URI'        => 'https://dev.phalcon.io?a=b',
-        ];
-
+        $_SERVER['REQUEST_URI'] = 'https://dev.phalcon.io?a=b';
         $request = new Request();
 
         $expected = 'https://dev.phalcon.io';
         $actual   = $request->getURI(true);
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

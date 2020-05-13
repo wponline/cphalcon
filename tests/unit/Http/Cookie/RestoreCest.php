@@ -35,13 +35,13 @@ class RestoreCest
         $this->setDiService('sessionStream');
 
         $name     = 'test';
-        $value    = "phalcon";
+        $value    = 'phalcon';
         $expire   = time() - 100;
-        $path     = "/";
+        $path     = '/';
         $secure   = true;
-        $domain   = "phalcon.ld";
+        $domain   = 'phalcon.ld';
         $httpOnly = true;
-        $options  = ["samesite" => "Lax"];
+        $options  = ['samesite' => 'Lax'];
 
         $cookie = new Cookie(
             $name,

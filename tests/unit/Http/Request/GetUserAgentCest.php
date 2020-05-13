@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,32 +28,17 @@ class GetUserAgentCest
     {
         $I->wantToTest('Http\Request - getUserAgent()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
-
+        unset($_SERVER['HTTP_USER_AGENT']);
         $request = new Request();
 
         $I->assertEmpty($request->getUserAgent());
 
-        $_SERVER = $store;
-
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_USER_AGENT'    => 'Chrome/Other 1.0.0',
-        ];
+        $_SERVER['HTTP_USER_AGENT'] = 'Chrome/Other 1.0.0';
 
         $request = new Request();
-
 
         $expected = 'Chrome/Other 1.0.0';
         $actual   = $request->getUserAgent();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

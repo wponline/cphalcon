@@ -5,32 +5,32 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
 
 namespace Phalcon\Test\Unit\Http\Request;
 
-use Phalcon\Http\Request;
-use Phalcon\Test\Fixtures\Http\PhpStream;
-use UnitTester;
-
 use function file_get_contents;
 use function file_put_contents;
 use function json_decode;
+
 use function parse_str;
+use Phalcon\Http\Request;
+use Phalcon\Test\Fixtures\Http\PhpStream;
 use function stream_wrapper_register;
 use function stream_wrapper_restore;
 use function stream_wrapper_unregister;
+use UnitTester;
 
 class GetPutCest
 {
     /**
      * Tests Phalcon\Http\Request :: getPut()
      *
-     * @issue  @13418
+     * @issue  #13418
      * @author Phalcon Team <team@phalcon.io>
      * @since  2017-06-03
      */
@@ -43,13 +43,7 @@ class GetPutCest
 
         file_put_contents('php://input', 'fruit=orange&quantity=4');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'PUT',
-        ];
-
+        $_SERVER['REQUEST_METHOD'] = 'PUT';
         $request = new Request();
 
         $I->assertTrue($request->hasPut('fruit'));
@@ -73,14 +67,12 @@ class GetPutCest
         );
 
         stream_wrapper_restore('php');
-
-        $_SERVER = $store;
     }
 
     /**
      * Tests Phalcon\Http\Request :: getPut() - json
      *
-     * @issue  @13418
+     * @issue  #13418
      * @author Phalcon Team <team@phalcon.io>
      * @since  2017-06-03
      */
@@ -96,14 +88,9 @@ class GetPutCest
             '{"fruit": "orange", "quantity": "4"}'
         );
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'PUT',
-            'CONTENT_TYPE'       => 'application/json',
-        ];
 
+        $_SERVER['REQUEST_METHOD'] = 'PUT';
+        $_SERVER['CONTENT_TYPE'] = 'application/json';
         $request = new Request();
 
         $expected = [
@@ -124,7 +111,5 @@ class GetPutCest
         );
 
         stream_wrapper_restore('php');
-
-        $_SERVER = $store;
     }
 }
