@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,79 +28,39 @@ class GetMethodCest
     {
         $I->wantToTest('Http\Request - getMethod()');
 
-        $I->wantToTest('Http\Request - getDigestAuth()');
-
         // Default
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
-
+        unset($_SERVER['REQUEST_METHOD']);
         $request = new Request();
 
         $I->assertEquals('GET', $request->getMethod());
 
-        $_SERVER = $store;
-
         // Valid
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'POST',
-        ];
-
+        $_SERVER['REQUEST_METHOD'] = 'POST';
         $request = new Request();
 
         $I->assertEquals('POST', $request->getMethod());
 
-        $_SERVER = $store;
-
         // Valid POST Override
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT'     => $time,
-            'REQUEST_METHOD'         => 'POST',
-            'X_HTTP_METHOD_OVERRIDE' => 'TRACE',
-        ];
-
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['X_HTTP_METHOD_OVERRIDE'] = 'TRACE';
         $request = new Request();
-        $I->assertEquals('TRACE', $request->getMethod());
 
-        $_SERVER = $store;
+        $I->assertEquals('TRACE', $request->getMethod());
+        unset($_SERVER['X_HTTP_METHOD_OVERRIDE']);
 
         // Valid POST spoof
-        $store1   = $_SERVER ?? [];
-        $store2   = $_REQUEST ?? [];
-        $time     = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER  = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'POST',
-        ];
-        $_REQUEST = [
-            '_method' => 'CONNECT',
-        ];
-
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_REQUEST['_method'] = 'CONNECT';
         $request = new Request();
         $request->setHttpMethodParameterOverride(true);
-        $I->assertEquals('CONNECT', $request->getMethod());
 
-        $_SERVER  = $store1;
-        $_REQUEST = $store2;
+        $I->assertEquals('CONNECT', $request->getMethod());
+        unset($_REQUEST['_method']);
 
         // Invalid
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'UNKNOWN',
-        ];
-
+        $_SERVER['REQUEST_METHOD'] = 'UNKNOWN';
         $request = new Request();
-        $I->assertEquals('GET', $request->getMethod());
 
-        $_SERVER = $store;
+        $I->assertEquals('GET', $request->getMethod());
     }
 }

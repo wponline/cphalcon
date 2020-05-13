@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -43,14 +43,8 @@ class GetBasicAuthCest
     {
         $I->wantToTest('Http\Request - getBasicAuth()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'PHP_AUTH_USER'      => 'darth',
-            'PHP_AUTH_PW'        => 'vader',
-        ];
-
+        $_SERVER['PHP_AUTH_USER'] = 'darth';
+        $_SERVER['PHP_AUTH_PW'] = 'vader';
         $request = new Request();
 
         $expected = [
@@ -59,7 +53,5 @@ class GetBasicAuthCest
         ];
         $actual   = $request->getBasicAuth();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

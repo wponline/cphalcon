@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -29,32 +29,17 @@ class GetHTTPRefererCest
         $I->wantToTest('Http\Request - getHTTPReferer()');
 
         // Empty
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
-
+        unset($_SERVER['HTTP_REFERER']);
         $request = new Request();
 
         $I->assertEmpty($request->getHTTPReferer());
 
-        $_SERVER = $store;
-
         // Valid
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_REFERER'       => 'Phalcon Referrer',
-        ];
-
+        $_SERVER['HTTP_REFERER'] = 'http://some.site';
         $request = new Request();
 
-        $expected = 'Phalcon Referrer';
+        $expected = 'http://some.site';
         $actual   = $request->getHTTPReferer();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

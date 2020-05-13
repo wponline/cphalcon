@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,16 +28,10 @@ class GetAcceptableContentCest
     {
         $I->wantToTest('Http\Request - getAcceptableContent()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_ACCEPT'        => 'text/html,'
-                . 'application/xhtml+xml,application/xml;q=0.9,'
-                . 'image/webp,image/apng,'
-                . '*/*;q=0.8',
-        ];
-
+        $_SERVER['HTTP_ACCEPT'] = 'text/html,'
+            . 'application/xhtml+xml,application/xml;q=0.9,'
+            . 'image/webp,image/apng,'
+            . '*/*;q=0.8';
         $request = new Request();
 
         $expected = [
@@ -68,7 +62,5 @@ class GetAcceptableContentCest
         ];
         $actual   = $request->getAcceptableContent();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

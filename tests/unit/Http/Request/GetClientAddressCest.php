@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,34 +28,21 @@ class GetClientAddressCest
     {
         $I->wantToTest('Http\Request - getClientAddress() - trustForwardedHeader');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT'   => $time,
-            'HTTP_X_FORWARDED_FOR' => '10.4.6.1',
-        ];
-
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '10.4.6.1';
         $request = new Request();
 
         $expected = '10.4.6.1';
         $actual   = $request->getClientAddress(true);
+
         $I->assertEquals($expected, $actual);
+        unset($_SERVER['HTTP_X_FORWARDED_FOR']);
 
-        $_SERVER = $store;
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_CLIENT_IP'     => '10.4.6.2',
-        ];
-
+        $_SERVER['HTTP_CLIENT_IP'] = '10.4.6.2';
         $request = new Request();
 
         $expected = '10.4.6.2';
         $actual   = $request->getClientAddress(true);
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 
     /**
@@ -68,20 +55,12 @@ class GetClientAddressCest
     {
         $I->wantToTest('Http\Request - getClientAddress()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REMOTE_ADDR'        => '10.4.6.3',
-        ];
-
+        $_SERVER['REMOTE_ADDR'] = '10.4.6.3';
         $request = new Request();
 
         $expected = '10.4.6.3';
         $actual   = $request->getClientAddress();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 
     /**
@@ -94,19 +73,11 @@ class GetClientAddressCest
     {
         $I->wantToTest('Http\Request - getClientAddress() - incorrect');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REMOTE_ADDR'        => ['10.4.6.3'],
-        ];
-
+        $_SERVER['REMOTE_ADDR'] = ['10.4.6.3'];
         $request = new Request();
 
         $actual = $request->getClientAddress();
         $I->assertFalse($actual);
-
-        $_SERVER = $store;
     }
 
     /**
@@ -119,20 +90,12 @@ class GetClientAddressCest
     {
         $I->wantToTest('Http\Request - getClientAddress() - multiple');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REMOTE_ADDR'        => '10.4.6.4,10.4.6.5',
-        ];
-
+        $_SERVER['REMOTE_ADDR'] = '10.4.6.4,10.4.6.5';
         $request = new Request();
 
         $expected = '10.4.6.4';
         $actual   = $request->getClientAddress();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 
     /**
@@ -145,19 +108,11 @@ class GetClientAddressCest
     {
         $I->wantToTest('Http\Request - getClientAddress() - ipv6');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REMOTE_ADDR'        => '2a00:8640:1::224:36ff:feef:1d89',
-        ];
-
+        $_SERVER['REMOTE_ADDR'] = '2a00:8640:1::224:36ff:feef:1d89';
         $request = new Request();
 
         $expected = '2a00:8640:1::224:36ff:feef:1d89';
         $actual   = $request->getClientAddress();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

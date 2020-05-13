@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,19 +28,11 @@ class GetContentTypeCest
     {
         $I->wantToTest('Http\Request - getContentType()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'CONTENT_TYPE'       => 'application/xhtml+xml',
-        ];
-
+        $_SERVER['CONTENT_TYPE'] = 'application/xhtml+xml';
         $request = new Request();
 
         $expected = 'application/xhtml+xml';
         $actual   = $request->getContentType();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

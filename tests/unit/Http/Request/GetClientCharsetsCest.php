@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,13 +28,7 @@ class GetClientCharsetsCest
     {
         $I->wantToTest('Http\Request - getClientCharsets()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT'  => $time,
-            'HTTP_ACCEPT_CHARSET' => 'iso-8859-5,unicode-1-1;q=0.8',
-        ];
-
+        $_SERVER['HTTP_ACCEPT_CHARSET'] = 'iso-8859-5,unicode-1-1;q=0.8';
         $request = new Request();
 
         $expected = [
@@ -49,7 +43,5 @@ class GetClientCharsetsCest
         ];
         $actual   = $request->getClientCharsets();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

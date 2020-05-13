@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -28,13 +28,7 @@ class GetLanguagesCest
     {
         $I->wantToTest('Http\Request - getLanguages()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT'   => $time,
-            'HTTP_ACCEPT_LANGUAGE' => 'es,es-ar;q=0.8,en;q=0.5,en-us;q=0.3,de-de; q=0.9',
-        ];
-
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'es,es-ar;q=0.8,en;q=0.5,en-us;q=0.3,de-de; q=0.9';
         $request = new Request();
 
         $expected = [
@@ -61,7 +55,5 @@ class GetLanguagesCest
         ];
         $actual   = $request->getLanguages();
         $I->assertEquals($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

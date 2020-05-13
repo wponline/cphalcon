@@ -5,23 +5,24 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
 
 namespace Phalcon\Test\Unit\Http\Request;
 
+use function file_put_contents;
 use Phalcon\Http\Request;
+use Phalcon\Storage\Exception;
 use Phalcon\Test\Fixtures\Http\PhpStream;
 use Phalcon\Test\Fixtures\Traits\DiTrait;
-use UnitTester;
 
-use function file_put_contents;
 use function stream_wrapper_register;
 use function stream_wrapper_restore;
 use function stream_wrapper_unregister;
+use UnitTester;
 
 class GetFilteredPutCest
 {
@@ -41,26 +42,23 @@ class GetFilteredPutCest
         stream_wrapper_register('php', PhpStream::class);
 
         file_put_contents('php://input', 'no-id=24');
+        $_SERVER['REQUEST_METHOD'] = 'PUT';
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'PUT',
-        ];
+        try {
+            $container = $this->newService('factoryDefault');
 
-        $container = $this->newService('factoryDefault');
-        /** @var Request $request */
-        $request = $container->get('request');
-        $request
-            ->setParameterFilters('id', ['absint'], ['put']);
+            /** @var Request $request */
+            $request = $container->get('request');
+            $request
+                ->setParameterFilters('id', ['absint'], ['put']);
 
-        $expected = 24;
-        $actual   = $request->getFilteredPut('id', 24);
-        $I->assertEquals($expected, $actual);
+            $expected = 24;
+            $actual   = $request->getFilteredPut('id', 24);
+            $I->assertEquals($expected, $actual);
 
-        stream_wrapper_restore('php');
-
-        $_SERVER = $store;
+            stream_wrapper_restore('php');
+        } catch (Exception $e) {
+            $I->fail($e->getMessage());
+        }
     }
 }

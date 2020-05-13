@@ -37,13 +37,13 @@ class SetExpiresCest
         $oExpireDate->modify('+1 months');
 
         $oExpireDate->setTimezone(
-            new DateTimeZone("UTC")
+            new DateTimeZone('UTC')
         );
 
         $oResponse->setExpires($oExpireDate);
 
         $I->assertSame(
-            $oExpireDate->format("D, d M Y H:i:s") . " GMT",
+            $oExpireDate->format('D, d M Y H:i:s') . ' GMT',
             $oResponse->getHeaders()->get('Expires')
         );
     }
